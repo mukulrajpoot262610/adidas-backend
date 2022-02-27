@@ -1,4 +1,3 @@
-const userModel = require("../models/user-model");
 const hashService = require("../services/hash-service");
 const otpService = require("../services/otp-service");
 const tokenService = require("../services/token-service");
@@ -6,10 +5,10 @@ const userService = require("../services/user-service");
 
 class AuthController {
     async sendOtp(req, res) {
-        const { phone } = req.body;
+        const { email } = req.body;
 
-        if (!phone) {
-            return res.status(400).json({ msg: 'Phone Field is required' })
+        if (!email) {
+            return res.status(400).json({ msg: 'Email Field is required' })
         }
 
         const otp = await otpService.generateOtp()
@@ -17,7 +16,7 @@ class AuthController {
         //hash
         const ttl = 1000 * 60 * 2  // 2 Minute expiry time
         const expires = Date.now() + ttl;
-        const data = `${phone}.${otp}.${expires}`
+        const data = `${email}.${otp}.${expires}`
         const hash = hashService.hashOtp(data)
 
         //sendOtp
@@ -25,19 +24,19 @@ class AuthController {
             // await otpService.sendBySms(phone, otp);
             res.status(200).json({
                 hash: `${hash}.${expires}`,
-                phone,
+                email,
                 otp
             })
         } catch (err) {
             console.log(err)
-            res.status(500).json({ msg: 'message sending failed' })
+            res.status(500).json({ msg: 'otp sending failed' })
         }
     }
 
     async verifyOtp(req, res) {
-        const { otp, hash, phone } = req.body;
+        const { otp, hash, email } = req.body;
 
-        if (!otp || !hash || !phone) {
+        if (!otp || !hash || !email) {
             return res.status(400).json({ msg: 'All Fields are required' })
         }
 
@@ -47,7 +46,7 @@ class AuthController {
             return res.status(400).json({ msg: 'OTP Expired' })
         }
 
-        const data = `${phone}.${otp}.${expires}`
+        const data = `${email}.${otp}.${expires}`
         const isValid = await otpService.verifyOtp(hashedOtp, data)
 
         if (!isValid) {
@@ -57,9 +56,9 @@ class AuthController {
         let user;
 
         try {
-            user = await userService.findUser({ phone })
+            user = await userService.findUser({ email })
             if (!user) {
-                user = await userService.createUser({ phone })
+                user = await userService.createUser({ email })
             }
         } catch (err) {
             console.log(err)

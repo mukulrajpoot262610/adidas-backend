@@ -3,7 +3,7 @@ const refreshModal = require('../models/refresh-modal')
 
 class TokenService {
     generateToken(payload) {
-        const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_TOKEN_SECRET, {
+        const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_TOKEN_SECRET,  {
             expiresIn: '6h'
         })
         const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_TOKEN_SECRET, {

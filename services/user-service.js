@@ -1,4 +1,4 @@
-const UserModel = require('../models/user-model')
+const UserModel = require('../models/user-modal')
 
 class UserService {
     async findUser(filter) {
