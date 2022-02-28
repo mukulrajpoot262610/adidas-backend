@@ -15,9 +15,9 @@ module.exports = async function (req, res, next) {
             throw new Error()
         }
 
-        if (!req.user.isAdmin) {
-            throw new Error()
-        }
+        // if (!userData.isAdmin) {
+        //     return res.status(401).json({ msg: 'Not Allowed' })
+        // }
 
         req.user = userData
         next()

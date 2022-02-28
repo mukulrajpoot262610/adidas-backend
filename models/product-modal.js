@@ -10,6 +10,7 @@ const reviewSchema = new mongoose.Schema({
 
 const productSchema = new mongoose.Schema({
     name: { type: String, required: true, unique: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     desc: { type: String, required: true },
     subname: { type: String, required: true },
     category: { type: String, required: true },
