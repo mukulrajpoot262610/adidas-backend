@@ -8,7 +8,7 @@ require('dotenv').config()
 
 const corsOption = {
     credentials: true,
-    origin: ['http://localhost:3000']
+    origin: ['http://localhost:3000', 'http://localhost:4000']
 }
 
 app.use(express.json({ limit: '5mb' }))

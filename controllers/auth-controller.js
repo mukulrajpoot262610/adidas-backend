@@ -84,6 +84,57 @@ class AuthController {
 
     }
 
+    async verifyAdminOtp(req, res) {
+        const { otp, hash, email } = req.body;
+
+        if (!otp || !hash || !email) {
+            return res.status(400).json({ msg: 'All Fields are required' })
+        }
+
+        const [hashedOtp, expires] = hash.split('.');
+
+        if (Date.now() > +expires) {
+            return res.status(400).json({ msg: 'OTP Expired' })
+        }
+
+        const data = `${email}.${otp}.${expires}`
+        const isValid = await otpService.verifyOtp(hashedOtp, data)
+
+        if (!isValid) {
+            return res.status(400).json({ msg: 'Invalid OTP' })
+        }
+
+        let user;
+
+        try {
+            user = await userService.findUser({ email })
+            if (!user) {
+                user = await userService.createUser({ email })
+            }
+        } catch (err) {
+            console.log(err)
+            return res.status(500).json({ msg: 'Internal Server Error' })
+        }
+
+        // token
+        const { accessToken, refreshToken } = tokenService.generateToken({ _id: user._id, activated: false })
+
+        await tokenService.storeRefreshToken(refreshToken, user._id)
+
+        res.cookie('accessCookie', accessToken, {
+            maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+            httpOnly: true
+        })
+
+        res.cookie('refreshCookie', refreshToken, {
+            maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+            httpOnly: true
+        })
+
+        res.json({ auth: true, user })
+
+    }
+
     async refresh(req, res) {
         // getrefresh token from header
         const { refreshCookie: refreshTokenFromCookie } = req.cookies
