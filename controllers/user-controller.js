@@ -4,14 +4,14 @@ class UserController {
     async updatePersonal(req, res) {
         const { name, gender } = req.body;
 
-        if (!name || !gender) {
-            res.status(400).json({ msg: 'All Field are required' })
-
-        }
-
-        const userId = req.user._id
-
         try {
+            if (!name || !gender) {
+                return res.status(400).json({ msg: 'All Field are required' })
+
+            }
+
+            const userId = req.user._id
+
             const user = await userService.findUser({ _id: userId })
 
             if (!user) {
@@ -32,14 +32,14 @@ class UserController {
     async addAddress(req, res) {
         const { street, landmark, country, state, city, pincode } = req.body;
 
-        if (!street || !landmark || !country || !state || !city || !pincode) {
-            res.status(400).json({ msg: 'All Field are required' })
-
-        }
-
-        const userId = req.user._id
-
         try {
+
+            if (!street || !landmark || !country || !state || !city || !pincode) {
+                return res.status(400).json({ msg: 'All Field are required' })
+            }
+
+            const userId = req.user._id
+
             const user = await userService.findUser({ _id: userId })
 
             if (!user) {
@@ -61,13 +61,14 @@ class UserController {
     async deleteAddress(req, res) {
         const { id } = req.params
 
-        if (!id) {
-            return res.status(400).json({ msg: 'All Field are required' })
-        }
-
-        const userId = req.user._id
-
         try {
+
+            if (!id) {
+                return res.status(400).json({ msg: 'All Field are required' })
+            }
+
+            const userId = req.user._id
+
             const user = await userService.findUser({ _id: userId })
 
             if (!user) {
