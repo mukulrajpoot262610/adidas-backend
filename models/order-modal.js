@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
-    token: { type: String, required: true },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     orderItems: [
         {
@@ -42,4 +41,4 @@ const orderSchema = new mongoose.Schema({
     timestamps: true
 })
 
-module.exports = mongoose.model("Orders", orderSchema, 'orders')
+module.exports = mongoose.model("Order", orderSchema, 'orders')

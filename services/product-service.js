@@ -19,6 +19,15 @@ class ProductService {
             console.log(err)
         }
     }
+
+    async fetchProductsFromId(id) {
+        try {
+            const product = await ProductModal.findById(id)
+            return product
+        } catch (err) {
+            console.log(err)
+        }
+    }
 }
 
 module.exports = new ProductService()

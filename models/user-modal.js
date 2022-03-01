@@ -14,7 +14,14 @@ const userSchema = new mongoose.Schema({
             city: { type: String },
             pincode: { type: String },
         }
-    ]
+    ],
+    orders: {
+        type: [
+            {
+                type: mongoose.Schema.Types.ObjectId, ref: 'Order'
+            }
+        ]
+    }
 }, {
     timestamps: true
 })

@@ -40,6 +40,17 @@ class ProductController {
             console.log(err)
         }
     }
+
+    async getProduct(req, res) {
+        const { id } = req.params
+
+        try {
+            const product = await productService.fetchProductsFromId(id)
+            res.status(200).json({ product })
+        } catch (err) {
+            console.log(err)
+        }
+    }
 }
 
 module.exports = new ProductController()

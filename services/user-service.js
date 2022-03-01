@@ -2,7 +2,7 @@ const UserModel = require('../models/user-modal')
 
 class UserService {
     async findUser(filter) {
-        const user = await UserModel.findOne(filter)
+        const user = await UserModel.findOne(filter).populate('orders')
         return user
     }
 
