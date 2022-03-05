@@ -17,10 +17,16 @@ router.delete('/api/address/:id', authMiddleware, userController.deleteAddress)
 
 router.post('/api/logout', authMiddleware, authController.logout)
 
-router.post('/api/products', adminMiddleware, productController.addProduct)
 router.get('/api/products', productController.getAllProducts)
 router.get('/api/product/:id', productController.getProduct)
 
 router.post('/api/place-order', authMiddleware, orderController.placeOrder)
+router.post('/api/products', adminMiddleware, productController.addProduct)
+router.get('/api/stats', adminMiddleware, orderController.getStats)
+
+///////////////////////////
+// ORDERS ROUTES
+router.get('/api/orders', adminMiddleware, orderController.getAllOrders)
+router.get('/api/order/:id', adminMiddleware, orderController.getOrderDetail)
 
 module.exports = router;

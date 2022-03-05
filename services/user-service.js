@@ -6,6 +6,15 @@ class UserService {
         return user
     }
 
+    async getAllUsers() {
+        try {
+            const users = await UserModel.find()
+            return users
+        } catch (err) {
+            return err
+        }
+    }
+
     async createUser(data) {
         const user = await UserModel.create(data)
         return user
