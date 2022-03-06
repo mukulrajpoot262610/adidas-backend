@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const notificationSchema = new mongoose.Schema({
-    orderNumber: { type: Number, unique: true },
+    orderNumber: { type: String },
     title: { type: String, required: true },
 }, {
     timestamps: true

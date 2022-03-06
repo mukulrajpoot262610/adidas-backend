@@ -28,6 +28,17 @@ class ProductService {
             console.log(err)
         }
     }
+
+    async decreaseStockCount(id) {
+        try {
+            const product = await ProductModal.findById(id)
+            console.log(product)
+            // product.quantity = product.quantity - e.qty
+            // await product.save()
+        } catch (err) {
+            console.log(err)
+        }
+    }
 }
 
 module.exports = new ProductService()

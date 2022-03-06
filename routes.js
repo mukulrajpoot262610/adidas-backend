@@ -1,4 +1,3 @@
-
 const router = require('express').Router()
 const authController = require('./controllers/auth-controller');
 const productController = require('./controllers/product-controller');
@@ -23,6 +22,10 @@ router.get('/api/product/:id', productController.getProduct)
 router.post('/api/place-order', authMiddleware, orderController.placeOrder)
 router.post('/api/products', adminMiddleware, productController.addProduct)
 router.get('/api/stats', adminMiddleware, orderController.getStats)
+
+///////////////////////////
+// USERS ROUTES
+router.get('/api/users', adminMiddleware, userController.getAllUsers)
 
 ///////////////////////////
 // ORDERS ROUTES

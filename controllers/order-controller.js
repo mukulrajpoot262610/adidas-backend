@@ -1,5 +1,7 @@
 const userService = require("../services/user-service")
 const orderService = require("../services/order-service")
+const productService = require("../services/product-service")
+const notificationService = require("../services/notification-service")
 
 class OrderController {
     async placeOrder(req, res) {
@@ -27,6 +29,11 @@ class OrderController {
             })
 
             user.orders = [order._id, ...user.orders]
+
+            await notificationService.createNotification({
+                orderNumber: order._id,
+                title: 'placed'
+            })
 
             await user.save()
 
@@ -103,13 +110,15 @@ class OrderController {
 
             const orders = await orderService.getAllOrder()
             const users = await userService.getAllUsers()
+            const notification = await notificationService.getNotifications()
 
             const sales = await orders.map((e) => e.totalPrice).reduce((a, b) => a + b, 0)
 
             res.status(200).json({
                 totalSales: sales,
                 totalUsers: users.length,
-                totalOrders: orders.length
+                totalOrders: orders.length,
+                notifications: notification.slice(0, 8)
             })
 
         } catch (err) {
