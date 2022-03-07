@@ -30,6 +30,10 @@ class OrderController {
 
             user.orders = [order._id, ...user.orders]
 
+            const ids = orderItems.map((e) => ({ id: e.product._id, qty: e.qty }))
+
+            productService.decreaseCountStock(ids)
+
             await notificationService.createNotification({
                 orderNumber: order._id,
                 title: 'placed'
@@ -125,6 +129,42 @@ class OrderController {
             console.log(err)
             res.status(500).json({ msg: 'Internal Server Error' })
         }
+    }
+
+    async updateStatus(req, res) {
+        const { id } = req.params
+        const { status } = req.body
+
+        try {
+
+            if (!status) {
+                return res.status(400).json({ msg: 'All Field are required' })
+            }
+
+            const userId = req.user._id
+            const user = await userService.findUser({ _id: userId })
+
+            if (!user) {
+                return res.status(404).json({ msg: "User not found" })
+            }
+
+            if (!user.isAdmin) {
+                return res.status(404).json({ msg: "Not Allowed" })
+            }
+
+            const order = await orderService.getOrder(id)
+
+            order.status = status
+
+            await order.save()
+
+            res.status(200).json({ order })
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ msg: 'Internal Server Error' })
+        }
+
     }
 }
 

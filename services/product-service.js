@@ -29,12 +29,14 @@ class ProductService {
         }
     }
 
-    async decreaseStockCount(id) {
+    async decreaseCountStock(ids) {
         try {
-            const product = await ProductModal.findById(id)
-            console.log(product)
-            // product.quantity = product.quantity - e.qty
-            // await product.save()
+            ids.map(async (e) => {
+                const order = await ProductModal.findById(e.id)
+                order.quantity = order.quantity - e.qty
+                await order.save()
+                return order
+            })
         } catch (err) {
             console.log(err)
         }

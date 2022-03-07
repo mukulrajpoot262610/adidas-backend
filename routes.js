@@ -31,5 +31,6 @@ router.get('/api/users', adminMiddleware, userController.getAllUsers)
 // ORDERS ROUTES
 router.get('/api/orders', adminMiddleware, orderController.getAllOrders)
 router.get('/api/order/:id', adminMiddleware, orderController.getOrderDetail)
+router.post('/api/order-status/:id', adminMiddleware, orderController.updateStatus)
 
 module.exports = router;
