@@ -5,6 +5,7 @@ const userController = require('./controllers/user-controller');
 const orderController = require('./controllers/order-controller');
 const authMiddleware = require('./middlewares/auth-middleware');
 const adminMiddleware = require('./middlewares/admin-middleware');
+const paymentController = require('./controllers/payment-controller');
 
 router.post('/api/send-otp', authController.sendOtp)
 router.post('/api/verify-otp', authController.verifyOtp)
@@ -32,5 +33,10 @@ router.get('/api/users', adminMiddleware, userController.getAllUsers)
 router.get('/api/orders', adminMiddleware, orderController.getAllOrders)
 router.get('/api/order/:id', adminMiddleware, orderController.getOrderDetail)
 router.post('/api/order-status/:id', adminMiddleware, orderController.updateStatus)
+router.get('/api/order-status/:id', authMiddleware, orderController.getStatus)
+
+///////////////////////////
+// PAYMENT ROUTES
+router.get('/api/checkout', paymentController.initiatePayment)
 
 module.exports = router;
